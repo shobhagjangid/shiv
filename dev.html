@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Darshan Poster Generator</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #fff; margin: 20px; text-align: center; }
+    .container { max-width: 950px; margin: 0 auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; text-align: left; }
+    label { font-weight: bold; font-size: 0.85rem; color: #ccc; }
+    input, select, button { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: #fff; }
+    canvas { max-width: 100%; height: auto; border: 2px solid #333; border-radius: 8px; margin-top: 10px; }
+    button.btn-download { background: #e50914; color: white; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; padding: 12px; margin-top: 15px; transition: 0.3s; }
+    button.btn-download:hover { background: #b20710; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Daily Darshan Poster Generator</h2>
+
+  <div class="controls">
+    <div>
+      <label>1. Select Image</label>
+      <input type="file" id="imageInput" accept="image/*">
+    </div>
+    <div>
+      <label>2. Theme Preset</label>
+      <select id="themeSelect">
+        <option value="gold">Golden Devotional (स्वर्ण)</option>
+        <option value="vermilion">Vibrant Red & Yellow (सिंदूरी)</option>
+        <option value="ocean">Ocean Blue (केशरिया नीला)</option>
+        <option value="classic">Classic White & Black (सफेद)</option>
+      </select>
+    </div>
+    <div>
+      <label>3. Font Style</label>
+      <select id="fontSelect">
+        <option value="Arial, sans-serif">Modern Clean (Sans-Serif)</option>
+        <option value="'Georgia', serif">Traditional Serif</option>
+        <option value="'Impact', sans-serif">Bold Highlight</option>
+      </select>
+    </div>
+    <div>
+      <label>4. Darshan Type</label>
+      <input type="text" id="darshanType" value="प्रातः श्रृंगार दर्शन">
+    </div>
+    <div>
+      <label>5. Date & Panchang</label>
+      <input type="date" id="datePickerInput">
+    </div>
+    <div>
+      <label>Tithi & Hindu Calendar</label>
+      <input type="text" id="dateText" value="" readonly>
+    </div>
+    <div>
+      <label>6. Temple/Organization</label>
+      <input type="text" id="templeName" value="श्री श्याम मंदिर, खाटूश्यामजी">
+    </div>
+  </div>
+
+  <canvas id="darshanCanvas"></canvas>
+  <br>
+  <button class="btn-download" id="downloadBtn">Download Poster</button>
+</div>
+
+<script>
+  const canvas = document.getElementById('darshanCanvas');
+  const ctx = canvas.getContext('2d');
+  const imageInput = document.getElementById('imageInput');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const dateInput = document.getElementById('dateText');
+  const datePickerInput = document.getElementById('datePickerInput');
+
+  let currentImg = null;
+
+  // Color Themes
+  const themes = {
+    gold: { main: "#FFD700", sub: "#FFFFFF", accent: "#FF8C00", stroke: "#000000" },
+    vermilion: { main: "#FF3300", sub: "#FFD700", accent: "#FFFFFF", stroke: "#FFFFFF" },
+    ocean: { main: "#00E5FF", sub: "#FFFFFF", accent: "#FFD700", stroke: "#000000" },
+    classic: { main: "#FFFFFF", sub: "#E0E0E0", accent: "#FFCC00", stroke: "#000000" }
+  };
+
+  // Dynamic Panchang Calculation Helper
+  function getDynamicPanchang(selectedDate = new Date()) {
+    const today = selectedDate;
+    
+    // Hindi Months & Days
+    const daysHindi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+    const monthsHindi = ["चैत्र", "वैशाख", "ज्येष्ठ", "आषाढ़", "श्रावण", "भाद्रपद", "आश्विन", "कार्तिक", "मार्गशीर्ष", "पौष", "माघ", "फाल्गुन"];
+    const tithisHindi = [
+      "प्रतिपदा", "द्वितीया", "तृतीया", "चतुर्थी", "पंचमी", "षष्ठी", "सप्तमी", 
+      "अष्टमी", "नवमी", "दशमी", "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "पूर्णिमा", "अमावस्या"
+    ];
+
+    // Format Gregorian Date
+    const monthsEngHindi = ["जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
+    const dayNum = today.getDate();
+    const monthNum = today.getMonth();
+    const yearNum = today.getFullYear();
+    const formattedGregorian = `${dayNum} ${monthsEngHindi[monthNum]} ${yearNum}`;
+
+    // Approximate Lunar Position for Tithi/Paksha
+    const epoch = new Date(2000, 0, 6); // Known New Moon
+    const daysSinceEpoch = (today - epoch) / (1000 * 60 * 60 * 24);
+    const synodicMonth = 29.53058867;
+    const lunarAge = (daysSinceEpoch % synodicMonth + synodicMonth) % synodicMonth;
+    
+    let paksha = lunarAge < 14.765 ? "शुक्ल" : "कृष्ण";
+    let tithiIdx = Math.floor((lunarAge % 14.765) / (14.765 / 15));
+    if (tithiIdx > 14) tithiIdx = 14;
+
+    let tithiName = tithisHindi[tithiIdx];
+    if (paksha === "कृष्ण" && tithiIdx === 14) tithiName = "अमावस्या";
+
+    // Hindu Lunar Month Estimation based on Solar Transit
+    let hinduMonthIdx = (monthNum + 1) % 12;
+    let hinduMonth = monthsHindi[hinduMonthIdx];
+    let vaar = daysHindi[today.getDay()];
+
+    return `${formattedGregorian} | ${hinduMonth} ${paksha} ${tithiName} | ${vaar}`;
+  }
+
+  // Set today's date in picker and calculate panchang
+  function initializeDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    datePickerInput.value = `${year}-${month}-${day}`;
+    updatePanchang();
+  }
+
+  // Update panchang when date changes
+  function updatePanchang() {
+    const selectedDateStr = datePickerInput.value;
+    if (!selectedDateStr) return;
+    
+    const parts = selectedDateStr.split('-');
+    const selectedDate = new Date(parts[0], parseInt(parts[1]) - 1, parts[2]);
+    dateInput.value = getDynamicPanchang(selectedDate);
+  }
+
+  // Event listener for date picker
+  datePickerInput.addEventListener('change', updatePanchang);
+
+  // Initialize on page load
+  window.addEventListener('DOMContentLoaded', initializeDate);
+
+  // Handle Image Upload
+  imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      currentImg = new Image();
+      currentImg.onload = () => drawPoster();
+      currentImg.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Re-draw on inputs change
+  document.querySelectorAll('input, select').forEach(element => {
+    element.addEventListener('input', () => { if (currentImg) drawPoster(); });
+  });
+
+  function drawPoster() {
+    canvas.width = currentImg.width;
+    canvas.height = currentImg.height;
+
+    // Draw uploaded image
+    ctx.drawImage(currentImg, 0, 0);
+
+    const selectedThemeKey = document.getElementById('themeSelect').value;
+    const currentTheme = themes[selectedThemeKey];
+    const selectedFont = document.getElementById('fontSelect').value;
+
+    const pad = canvas.width * 0.05;
+    const bottomY = canvas.height - pad;
+
+    // 1. Darshan Type Text
+    const darshanVal = document.getElementById('darshanType').value;
+    ctx.font = `bold ${canvas.width * 0.065}px ${selectedFont}`;
+    ctx.fillStyle = currentTheme.main;
+    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+    ctx.shadowBlur = 12;
+    ctx.lineWidth = canvas.width * 0.005;
+    ctx.strokeStyle = currentTheme.stroke;
+    ctx.strokeText(darshanVal, pad, bottomY - canvas.height * 0.09);
+    ctx.fillText(darshanVal, pad, bottomY - canvas.height * 0.09);
+
+    // 2. Dynamic Date & Tithi / Vaar Text
+    const dateVal = document.getElementById('dateText').value;
+    ctx.font = `bold ${canvas.width * 0.038}px ${selectedFont}`;
+    ctx.fillStyle = currentTheme.sub;
+    ctx.strokeText(dateVal, pad, bottomY - canvas.height * 0.025);
+    ctx.fillText(dateVal, pad, bottomY - canvas.height * 0.025);
+
+    // 3. Temple Name Text (Top Left)
+    const templeVal = document.getElementById('templeName').value;
+    ctx.textAlign = "left";
+    ctx.font = `bold ${canvas.width * 0.038}px ${selectedFont}`;
+    ctx.fillStyle = currentTheme.accent;
+    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+    ctx.shadowBlur = 12;
+    ctx.lineWidth = canvas.width * 0.005;
+    ctx.strokeStyle = currentTheme.stroke;
+    ctx.strokeText(templeVal, pad, pad * 2.5);
+    ctx.fillText(templeVal, pad, pad * 2.5);
+
+    ctx.textAlign = "left";
+  }
+
+  // Reliable Canvas Image Download Implementation
+  downloadBtn.addEventListener('click', () => {
+    if (!currentImg) {
+      alert("Please upload an image first!");
+      return;
+    }
+    
+    // Create an anchor element and trigger file save
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.download = `Darshan-Poster-${Date.now()}.jpg`;
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+</script>
+
+</body>
+</html>
