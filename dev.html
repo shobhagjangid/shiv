@@ -44,14 +44,32 @@
         <option value="Arial, sans-serif">Modern Clean (Sans-Serif)</option>
         <option value="'Georgia', serif">Traditional Serif</option>
         <option value="'Impact', sans-serif">Bold Highlight</option>
+        <option value="'Yatra One', monospace">Yatra One</option>
+        <option value="'Hind', sans-serif">Hind</option>
       </select>
     </div>
     <div>
-      <label>4. Darshan Type</label>
-      <input type="text" id="darshanType" value="प्रातः श्रृंगार दर्शन">
+      <label>4. Font Weight</label>
+      <select id="fontWeightSelect">
+        <option value="300">300 - Light</option>
+        <option value="400" selected>400 - Regular</option>
+        <option value="500">500 - Medium</option>
+        <option value="600">600 - Semi Bold</option>
+        <option value="700">700 - Bold</option>
+      </select>
     </div>
     <div>
-      <label>5. Date & Panchang</label>
+      <label>5. Darshan Type</label>
+      <select id="darshanType">
+        <option value="प्रातः श्रृंगार दर्शन" selected>प्रातः श्रृंगार दर्शन</option>
+        <option value="मंगला आरती दर्शन">मंगला आरती दर्शन</option>
+        <option value="राजभोग दर्शन">राजभोग दर्शन</option>
+        <option value="संध्या आरती दर्शन">संध्या आरती दर्शन</option>
+        <option value="शयन दर्शन">शयन दर्शन</option>
+      </select>
+    </div>
+    <div>
+      <label>6. Date & Panchang</label>
       <input type="date" id="datePickerInput">
     </div>
     <div>
@@ -59,7 +77,7 @@
       <input type="text" id="dateText" value="" readonly>
     </div>
     <div>
-      <label>6. Temple/Organization</label>
+      <label>7. Temple/Organization</label>
       <input type="text" id="templeName" value="श्री पंच परमेश्वर महादेव मंदिर, नांगल पुरोहितान">
     </div>
   </div>
@@ -181,41 +199,41 @@
     const selectedThemeKey = document.getElementById('themeSelect').value;
     const currentTheme = themes[selectedThemeKey];
     const selectedFont = document.getElementById('fontSelect').value;
+    const selectedWeight = document.getElementById('fontWeightSelect').value;
 
     const pad = canvas.width * 0.05;
     const bottomY = canvas.height - pad;
+    const centerX = canvas.width / 2;
+    ctx.textAlign = "center";
 
     // 1. Darshan Type Text
     const darshanVal = document.getElementById('darshanType').value;
-    ctx.font = `bold ${canvas.width * 0.065}px ${selectedFont}`;
+    ctx.font = `${selectedWeight} ${canvas.width * 0.065}px ${selectedFont}`;
     ctx.fillStyle = currentTheme.main;
     ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
     ctx.shadowBlur = 12;
     ctx.lineWidth = canvas.width * 0.005;
     ctx.strokeStyle = currentTheme.stroke;
-    ctx.strokeText(darshanVal, pad, bottomY - canvas.height * 0.09);
-    ctx.fillText(darshanVal, pad, bottomY - canvas.height * 0.09);
+    ctx.strokeText(darshanVal, centerX, bottomY - canvas.height * 0.09);
+    ctx.fillText(darshanVal, centerX, bottomY - canvas.height * 0.09);
 
     // 2. Dynamic Date & Tithi / Vaar Text
     const dateVal = document.getElementById('dateText').value;
-    ctx.font = `bold ${canvas.width * 0.038}px ${selectedFont}`;
+    ctx.font = `${selectedWeight} ${canvas.width * 0.038}px ${selectedFont}`;
     ctx.fillStyle = currentTheme.sub;
-    ctx.strokeText(dateVal, pad, bottomY - canvas.height * 0.025);
-    ctx.fillText(dateVal, pad, bottomY - canvas.height * 0.025);
+    ctx.strokeText(dateVal, centerX, bottomY - canvas.height * 0.025);
+    ctx.fillText(dateVal, centerX, bottomY - canvas.height * 0.025);
 
     // 3. Temple Name Text (Top Left)
     const templeVal = document.getElementById('templeName').value;
-    ctx.textAlign = "left";
-    ctx.font = `bold ${canvas.width * 0.038}px ${selectedFont}`;
+    ctx.font = `${selectedWeight} ${canvas.width * 0.040}px ${selectedFont}`;
     ctx.fillStyle = currentTheme.accent;
     ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
     ctx.shadowBlur = 12;
     ctx.lineWidth = canvas.width * 0.005;
     ctx.strokeStyle = currentTheme.stroke;
-    ctx.strokeText(templeVal, pad, pad * 2.5);
-    ctx.fillText(templeVal, pad, pad * 2.5);
-
-    ctx.textAlign = "left";
+    ctx.strokeText(templeVal, centerX, pad * 2.5);
+    ctx.fillText(templeVal, centerX, pad * 2.5);
   }
 
   // Reliable Canvas Image Download Implementation
