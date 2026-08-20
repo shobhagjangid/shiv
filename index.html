@@ -85,7 +85,13 @@
   <canvas id="darshanCanvas"></canvas>
   <br>
   <button class="btn-download" id="downloadBtn">Download Poster</button>
+
+<p class="mb-0" style="margin: 15px 0 0;" >
+  Made with ❤️ by <a style="color: #007bff;" href="tel:8562087096" target="_blank">Shobhag Jangid</a>
+</p>
 </div>
+
+
 
 <script>
   const canvas = document.getElementById('darshanCanvas');
@@ -252,6 +258,21 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  });
+
+  // Discourage casual source copying; browser-side code cannot provide real secrecy.
+  document.addEventListener('contextmenu', (event) => event.preventDefault());
+  document.addEventListener('dragstart', (event) => event.preventDefault());
+  document.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase();
+    const blockedShortcut =
+      event.key === 'F12' ||
+      (event.ctrlKey && event.shiftKey && ['i', 'j', 'c'].includes(key)) ||
+      (event.ctrlKey && key === 'u');
+
+    if (blockedShortcut) {
+      event.preventDefault();
+    }
   });
 </script>
 
