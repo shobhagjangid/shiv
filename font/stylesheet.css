@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'AMS Manthan';
+    src: url('AMSManthan.eot');
+    src: url('AMSManthan.eot?#iefix') format('embedded-opentype'),
+        url('AMSManthan.woff2') format('woff2'),
+        url('AMSManthan.woff') format('woff'),
+        url('AMSManthan.svg#AMSManthan') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AMS BadHand';
+    src: url('AMSBadHand.eot');
+    src: url('AMSBadHand.eot?#iefix') format('embedded-opentype'),
+        url('AMSBadHand.woff2') format('woff2'),
+        url('AMSBadHand.woff') format('woff'),
+        url('AMSBadHand.svg#AMSBadHand') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AMS Aasmi';
+    src: url('AMSAasmi.eot');
+    src: url('AMSAasmi.eot?#iefix') format('embedded-opentype'),
+        url('AMSAasmi.woff2') format('woff2'),
+        url('AMSAasmi.woff') format('woff'),
+        url('AMSAasmi.svg#AMSAasmi') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

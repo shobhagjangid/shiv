@@ -8,33 +8,56 @@
   <title>Daily Darshan Poster Generator</title>
   
   <style>
-
 @font-face {
-    font-family: "AMS BadHand";
-    src: url("./AMS_BadHand.woff2") format("woff2"),
-         url("./AMS_BadHand.woff") format("woff");
+    font-family: 'AMS Manthan';
+    src: url('./font/AMSManthan.eot');
+    src: url('./font/AMSManthan.eot?#iefix') format('embedded-opentype'),
+        url('./font/AMSManthan.woff2') format('woff2'),
+        url('./font/AMSManthan.woff') format('woff'),
+        url('./font/AMSManthan.svg#AMSManthan') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: "AMS Aasmi";
-    src: url("./AMS_Aasmi.woff2") format("woff2"),
-         url("./AMS_Aasmi.woff") format("woff");
+    font-family: 'AMS BadHand';
+    src: url('./font/AMSBadHand.eot');
+    src: url('./font/AMSBadHand.eot?#iefix') format('embedded-opentype'),
+        url('./font/AMSBadHand.woff2') format('woff2'),
+        url('./font/AMSBadHand.woff') format('woff'),
+        url('./font/AMSBadHand.svg#AMSBadHand') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: "AMS Manthan";
-    src: url("./AMS_Manthan.woff2") format("woff2"),
-         url("./AMS_Manthan.woff") format("woff");
+    font-family: 'AMS Kashi';
+    src: url('./font/AMSKashi.eot');
+    src: url('./font/AMSKashi.eot?#iefix') format('embedded-opentype'),
+        url('./font/AMSKashi.woff2') format('woff2'),
+        url('./font/AMSKashi.woff') format('woff'),
+        url('./font/AMSKashi.svg#AMSKashi') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
+
+
+
+@font-face {
+    font-family: 'AMS Aasmi';
+    src: url('./font/AMSAasmi.eot');
+    src: url('./font/AMSAasmi.eot?#iefix') format('embedded-opentype'),
+        url('./font/AMSAasmi.woff2') format('woff2'),
+        url('./font/AMSAasmi.woff') format('woff'),
+        url('./font/AMSAasmi.svg#AMSAasmi') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #fff; margin: 20px; text-align: center; }
     .container { max-width: 950px; margin: 0 auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
@@ -66,33 +89,52 @@
       </select>
     </div>
     <div>
-      <label>3. Font Style</label>
+      <label>3. Border Frame</label>
+      <select id="borderFrameSelect">
+        <option value="none">None</option>
+        <option value="double" selected>2 Line</option>
+        <option value="single">1 Line</option>
+        <option value="dotted">Dotted</option>
+        <option value="dashed">Dashed</option>
+        <option value="groove">Groove</option>
+          <option value="ridge">Ridge</option>
+          <option value="inset">Inset</option>
+          <option value="outset">Outset</option>
+       
+      </select>
+    </div>
+    <div>
+      <label>4. Font Style</label>
       <select id="fontSelect">
     
-
+        <!-- <option value="'AMS BadHand', cursive">AMS BadHand</option>
+        <option value="'AMS Aasmi', cursive">AMS Aasmi</option>
+        <option value="'AMS Manthan', cursive">AMS Manthan</option>
+        <option value="'AMS Kashi', cursive" selected>AMS Kashi</option> -->
 
         <option value="Arial, sans-serif">Modern Clean (Sans-Serif)</option>
         <option value="'Georgia', serif">Traditional Serif</option>
         <option value="'Impact', sans-serif">Bold Highlight</option>
         <option value="'Yatra One', monospace">Yatra One</option>
         <option value="'Hind', sans-serif">Hind</option>
-        <option value="'हिन्द Bold', sans-serif" selected>हिन्द Bold</option>
+        <option value="'हिन्द Bold', sans-serif" >हिन्द Bold</option>
+        
 
       </select>
     </div>
     <div>
-      <label>4. Font Weight</label>
+      <label>5. Font Weight</label>
       <select id="fontWeightSelect">
       
         <option value="300">300 - Light</option>
         <option value="400" >400 - Regular</option>
         <option value="500">500 - Medium</option>
         <option value="600">600 - Semi Bold</option>
-           <option value="700" selected>700 - Bold</option> 
+           <option value="700" >700 - Bold</option> 
       </select>
     </div>
     <div>
-      <label>5. Darshan Type</label>
+      <label>6. Darshan Type</label>
       <select id="darshanType">
         <option value="प्रातः श्रृंगार दर्शन" selected>प्रातः श्रृंगार दर्शन</option>
         <option value="मंगला आरती दर्शन">मंगला आरती दर्शन</option>
@@ -102,7 +144,7 @@
       </select>
     </div>
     <div>
-      <label>6. Date & Panchang</label>
+      <label>7. Date & Panchang</label>
       <input type="date" id="datePickerInput">
     </div>
     <div>
@@ -110,7 +152,7 @@
       <input type="text" id="dateText" value="" readonly>
     </div>
     <div>
-      <label>7. Temple/Organization</label>
+      <label>8. Temple/Organization</label>
       <input type="text" id="templeName" value="श्री पंच परमेश्वर महादेव मंदिर, नांगल पुरोहितान">
     </div>
   </div>
@@ -151,6 +193,13 @@
     ocean: { main: "#00E5FF", sub: "#FFFFFF", accent: "#FFD700", stroke: "#000000" },
     classic: { main: "#FFFFFF", sub: "#E0E0E0", accent: "#FFCC00", stroke: "#000000" }
   };
+
+  function shadeColor(hexColor, amount) {
+    const color = hexColor.replace('#', '');
+    const channels = [0, 2, 4].map(index => parseInt(color.slice(index, index + 2), 16));
+    const shadedChannels = channels.map(channel => Math.max(0, Math.min(255, channel + amount)));
+    return `#${shadedChannels.map(channel => channel.toString(16).padStart(2, '0')).join('')}`;
+  }
 
   function getDynamicPanchang(selectedDate = new Date()) {
     const dateKey = [
@@ -219,8 +268,58 @@
 
     const selectedThemeKey = document.getElementById('themeSelect').value;
     const currentTheme = themes[selectedThemeKey];
+    const selectedBorderFrame = document.getElementById('borderFrameSelect').value;
     const selectedFont = document.getElementById('fontSelect').value;
     const selectedWeight = document.getElementById('fontWeightSelect').value;
+
+    if (selectedBorderFrame !== 'none') {
+      const borderWidth = Math.max(2, canvas.width * 0.006);
+      const outerInset = borderWidth / 2 + 2;
+      const innerInset = outerInset + borderWidth + Math.max(3, canvas.width * 0.008);
+      ctx.save();
+      ctx.shadowColor = "transparent";
+      ctx.strokeStyle = currentTheme.main;
+      ctx.lineWidth = borderWidth;
+
+      if (selectedBorderFrame === 'double') {
+        ctx.strokeRect(outerInset, outerInset, canvas.width - outerInset * 2, canvas.height - outerInset * 2);
+        ctx.lineWidth = Math.max(1, borderWidth * 0.65);
+        ctx.strokeRect(innerInset, innerInset, canvas.width - innerInset * 2, canvas.height - innerInset * 2);
+      } else if (['single', 'dotted', 'dashed'].includes(selectedBorderFrame)) {
+        if (selectedBorderFrame === 'dotted') ctx.setLineDash([borderWidth, borderWidth * 1.5]);
+        if (selectedBorderFrame === 'dashed') ctx.setLineDash([borderWidth * 4, borderWidth * 2]);
+        ctx.strokeRect(outerInset, outerInset, canvas.width - outerInset * 2, canvas.height - outerInset * 2);
+      } else {
+        const lightColor = shadeColor(currentTheme.main, 60);
+        const darkColor = shadeColor(currentTheme.main, -60);
+        const isRaised = selectedBorderFrame === 'outset' || selectedBorderFrame === 'ridge';
+        const topLeftColor = isRaised ? lightColor : darkColor;
+        const bottomRightColor = isRaised ? darkColor : lightColor;
+
+        ctx.lineWidth = borderWidth;
+        ctx.strokeStyle = topLeftColor;
+        ctx.beginPath();
+        ctx.moveTo(outerInset, canvas.height - outerInset);
+        ctx.lineTo(outerInset, outerInset);
+        ctx.lineTo(canvas.width - outerInset, outerInset);
+        ctx.stroke();
+
+        ctx.strokeStyle = bottomRightColor;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width - outerInset, outerInset);
+        ctx.lineTo(canvas.width - outerInset, canvas.height - outerInset);
+        ctx.lineTo(outerInset, canvas.height - outerInset);
+        ctx.stroke();
+
+        if (selectedBorderFrame === 'groove' || selectedBorderFrame === 'ridge') {
+          const secondInset = innerInset;
+          ctx.lineWidth = Math.max(1, borderWidth * 0.6);
+          ctx.strokeStyle = bottomRightColor;
+          ctx.strokeRect(secondInset, secondInset, canvas.width - secondInset * 2, canvas.height - secondInset * 2);
+        }
+      }
+      ctx.restore();
+    }
 
     const pad = canvas.width * 0.05;
     const bottomY = canvas.height - pad;
