@@ -8,6 +8,34 @@
   <title>Daily Darshan Poster Generator</title>
   
   <style>
+
+@font-face {
+    font-family: "AMS BadHand";
+    src: url("./AMS_BadHand.woff2") format("woff2"),
+         url("./AMS_BadHand.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "AMS Aasmi";
+    src: url("./AMS_Aasmi.woff2") format("woff2"),
+         url("./AMS_Aasmi.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "AMS Manthan";
+    src: url("./AMS_Manthan.woff2") format("woff2"),
+         url("./AMS_Manthan.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #fff; margin: 20px; text-align: center; }
     .container { max-width: 950px; margin: 0 auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
     .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; text-align: left; }
@@ -40,22 +68,27 @@
     <div>
       <label>3. Font Style</label>
       <select id="fontSelect">
+    
+
+
         <option value="Arial, sans-serif">Modern Clean (Sans-Serif)</option>
         <option value="'Georgia', serif">Traditional Serif</option>
         <option value="'Impact', sans-serif">Bold Highlight</option>
         <option value="'Yatra One', monospace">Yatra One</option>
         <option value="'Hind', sans-serif">Hind</option>
-        <option value="'हिन्द Bold', sans-serif">हिन्द Bold</option>
+        <option value="'हिन्द Bold', sans-serif" selected>हिन्द Bold</option>
+
       </select>
     </div>
     <div>
       <label>4. Font Weight</label>
       <select id="fontWeightSelect">
+      
         <option value="300">300 - Light</option>
-        <option value="400" selected>400 - Regular</option>
+        <option value="400" >400 - Regular</option>
         <option value="500">500 - Medium</option>
         <option value="600">600 - Semi Bold</option>
-        <option value="700">700 - Bold</option>
+           <option value="700" selected>700 - Bold</option> 
       </select>
     </div>
     <div>
