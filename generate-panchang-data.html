@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Panchang JSON</title>
+</head>
+<body>
+  <label>Free Astrology API key: <input id="apiKey" type="password" autocomplete="off"></label>
+  <button id="generate">Generate 2 years</button>
+  <p id="status"></p>
+  <script>
+    const apiUrl = 'https://json.freeastrologyapi.com/complete-panchang';
+    const fromDate = new Date('2026-08-20T00:00:00');
+    const toDate = new Date('2028-08-20T00:00:00');
+    const location = { latitude: 27.0238, longitude: 75.7785, timezone: 5.5 };
+    const status = document.getElementById('status');
+
+    function dateKey(date) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    async function requestPanchang(date, apiKey) {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+        body: JSON.stringify({
+          year: date.getFullYear(), month: date.getMonth() + 1, date: date.getDate(),
+          hours: 6, minutes: 0, seconds: 0, ...location,
+          config: { observation_point: 'topocentric', ayanamsha: 'lahiri', language: 'en' }
+        })
+      });
+      if (!response.ok) throw new Error(`${dateKey(date)}: HTTP ${response.status}`);
+      return response.json();
+    }
+
+    document.getElementById('generate').addEventListener('click', async () => {
+      const apiKey = document.getElementById('apiKey').value.trim();
+      if (!apiKey) { status.textContent = 'Enter an API key first.'; return; }
+      const records = {};
+      const total = Math.round((toDate - fromDate) / 86400000) + 1;
+      for (let index = 0; index < total; index += 1) {
+        const date = new Date(fromDate.getTime() + index * 86400000);
+        try {
+          records[dateKey(date)] = await requestPanchang(date, apiKey);
+          status.textContent = `Fetched ${index + 1} of ${total}: ${dateKey(date)}`;
+        } catch (error) {
+          status.textContent = error.message;
+          throw error;
+        }
+      }
+      const output = {
+        source: apiUrl,
+        calendar: 'Vikram Samvat Purnimanta',
+        location,
+        dateRange: { from: dateKey(fromDate), to: dateKey(toDate), days: total },
+        records
+      };
+      const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'panchang-data.json';
+      link.click();
+      URL.revokeObjectURL(link.href);
+      status.textContent = `Finished: ${total} daily records downloaded.`;
+    });
+  </script>
+</body>
+</html>

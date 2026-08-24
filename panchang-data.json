@@ -1,0 +1,15 @@
+{
+  "source": "https://json.freeastrologyapi.com/complete-panchang",
+  "calendar": "Vikram Samvat Purnimanta",
+  "location": {
+    "latitude": 27.0238,
+    "longitude": 75.7785,
+    "timezone": 5.5
+  },
+  "dateRange": {
+    "from": "2026-08-20",
+    "to": "2028-08-20",
+    "days": 732
+  },
+  "records": {}
+}
