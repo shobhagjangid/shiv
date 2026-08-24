@@ -160,7 +160,7 @@
   function getMonthDisplayName(value) {
     const rawValue = String(value || '').trim();
     const normalized = rawValue.toLowerCase().replace(/[ -]/g, '');
-    return monthNameDisplay[rawValue] || monthNameDisplay[normalized] || rawValue || 'Unknown';
+    return monthNameDisplay[rawValue] || monthNameDisplay[normalized] || rawValue || '';
   }
 
   function decodeApiOutput(value) {
